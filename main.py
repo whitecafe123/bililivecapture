@@ -2,7 +2,6 @@ import urllib.parse
 import urllib.request
 
 import time
-import cv2
 import gzip
 import io
 import json
@@ -38,7 +37,6 @@ headers = {
 
 
 def CaptureVideo(address):
-    # print(cv2.__version__)
     response = urllib.request.urlopen(address)
     filename = time.strftime("video/%Y%m%d%H%M%S", time.localtime())+".avi"
     f = open(filename, 'wb')
@@ -62,14 +60,16 @@ def CaptureVideo(address):
 
 
 def decodeImage(filename):
-    videoReader = cv2.VideoCapture(filename)
-    try:
-        gotImage, image = videoReader.read()
-        if (gotImage):
-            cv2.imwrite("video/%sFrame%d.jpg" %(time.strftime("%Y%m%d%H%M%S", time.localtime()), 1), image)
-
-    except Exception as e:
-        print(e)
+    timestr = time.strftime("%Y%m%d%H%M%S", time.localtime())
+    os.system("ffmpeg -i "+filename+" -f image2 -vf fps=fps=1 video/"+timestr+"_%d.png")
+    # videoReader = cv2.VideoCapture(filename)
+    # try:
+    #     gotImage, image = videoReader.read()
+    #     if (gotImage):
+    #         cv2.imwrite("video/%sFrame%d.jpg" %(time.strftime("%Y%m%d%H%M%S", time.localtime()), 1), image)
+    #
+    # except Exception as e:
+    #     print(e)
 
 
 def searchAndPrint(resstr, n):
