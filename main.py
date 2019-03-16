@@ -128,19 +128,23 @@ def parseWeb(url):
 
 
 def mainLoop():
-    # 获取直播间首页，解析得到视频流地址
-    urls = parseWeb(r"http://live.bilibili.com/1092")
-    addr = urls[0]
-    print(addr)
-    # 获取视频片段，保存avi文件
-    file = CaptureVideo(addr)
-    # 获取avi的第一帧图像保存jpg
-    decodeImage(file)
-    # 干掉avi
-    os.remove(file)
+    try:
+        # 获取直播间首页，解析得到视频流地址
+        urls = parseWeb(r"http://live.bilibili.com/1092")
+        addr = urls[0]
+        print(addr)
+        # 获取视频片段，保存avi文件
+        file = CaptureVideo(addr)
+        # 获取avi的第一帧图像保存jpg
+        decodeImage(file)
+        # 干掉avi
+        os.remove(file)
+    except Exception as e:
+        print("error in Mainloop:", e)
 
 
 if __name__ == '__main__':
     while True:
         mainLoop()
         time.sleep(capture_loop_sleep)
+
